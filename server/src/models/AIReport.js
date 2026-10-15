@@ -1,4 +1,18 @@
 const mongoose = require('mongoose');
+const feedbackSchema=new mongoose.Schema({
+  value:{
+    type: String ,
+    enum:[ "helpful" , "not_helpful"],
+    required: true,
+  },
+  submittedAt:{
+    type:Date,
+    default: Date.now,
+  },
+
+
+},
+{_id: false},);
 
 const aiReportSchema = new mongoose.Schema(
   {
@@ -6,9 +20,12 @@ const aiReportSchema = new mongoose.Schema(
     modelVersion: { type: String, default: '' },
     result: { type: mongoose.Schema.Types.Mixed, required: true },
     error: { type: String, default: '' },
-  },
+    feedback:{rating:{type: String,enum:{'helpful','not_helpful'},default: null, }, submittedAt:{type: Date,
+       default: null}, },},
+
   { timestamps: true }
 );
+
 
 aiReportSchema.index({ user: 1, createdAt: -1 });
 

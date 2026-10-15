@@ -1,4 +1,17 @@
+const mongoose=require('mongoose');
+const aiReport=require('../models/AIReport');
 const aiReportService = require('../services/aiReportService');
+function formatReport(doc){
+  return {
+    id:doc_id,
+    createdAt:doc.modelVersion,
+    result: doc.result,
+    error:doc.error,
+    feedback: doc.feedback?.rating ?{
+      rating: doc.feedback.rating ,submittedAt: doc.feedback.submittedAt,
+    }: null,
+  };
+}
 
 async function latest(req, res, next) {
   try {
@@ -46,6 +59,22 @@ async function refresh(req, res, next) {
       });
     }
     next(err);
+  }
+}
+
+async function saveFeedback(req  ,res,next){
+  try{
+    const {id }=req.params;
+    const {rating, reason=''}=req.body;
+
+    if(!mongoose.isValidObjectId(id)){
+      return res.status(400).json({message: 'Rating must be helpful or not_helpful',});
+    }
+    if(typeof reason!=='string'){
+      return res.status(400).json({ message: 'Reason must be text'});
+
+    }
+    
   }
 }
 

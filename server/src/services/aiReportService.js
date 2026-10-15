@@ -35,4 +35,5 @@ async function refreshReport(userId) {
   return doc.toObject();
 }
 
+
 module.exports = { getLatestReport, refreshReport };
